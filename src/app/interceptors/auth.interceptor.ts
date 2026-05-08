@@ -7,7 +7,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const token = auth.googleAccessToken();
 
-  if (token && req.url.includes('googleapis.com')) {
+  const needsBearer = req.url.includes('googleapis.com') &&
+    !req.url.includes('generativelanguage.googleapis.com') &&
+    !req.url.includes('translation.googleapis.com');
+
+  if (token && needsBearer) {
     const authReq = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
     });
