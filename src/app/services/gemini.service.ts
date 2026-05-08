@@ -17,7 +17,7 @@ interface GeminiResponse {
 export class GeminiService {
   private readonly http = inject(HttpClient);
   private readonly endpoint =
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent';
 
   readonly isGenerating = signal(false);
   readonly generationError = signal<AppError | null>(null);
