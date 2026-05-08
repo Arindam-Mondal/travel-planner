@@ -1,10 +1,8 @@
 import {
   Component,
   OnInit,
-  effect,
   inject,
   output,
-  signal,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -86,14 +84,7 @@ export class TripFormComponent implements OnInit {
     { validators: endAfterStartValidator },
   );
 
-  ngOnInit(): void {
-    // Auto-regenerate on valid form changes (debounced inside service)
-    this.form.valueChanges.subscribe(() => {
-      if (this.form.valid) {
-        this.geminiService.scheduleRegeneration(this.buildPreferences());
-      }
-    });
-  }
+  ngOnInit(): void {}
 
   async onSubmit(): Promise<void> {
     if (this.form.invalid) {
