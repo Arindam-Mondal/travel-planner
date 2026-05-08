@@ -66,6 +66,7 @@ export class TripFormComponent implements OnInit {
   readonly geminiService = inject(GeminiService);
 
   readonly itineraryGenerated = output<Itinerary>();
+  readonly preferencesEmitted = output<TravelPreferences>();
   readonly minDate = new Date();
 
   readonly budgetOptions = BUDGET_OPTIONS;
@@ -92,7 +93,9 @@ export class TripFormComponent implements OnInit {
       return;
     }
     try {
-      const itinerary = await this.geminiService.generateItinerary(this.buildPreferences());
+      const prefs = this.buildPreferences();
+      this.preferencesEmitted.emit(prefs);
+      const itinerary = await this.geminiService.generateItinerary(prefs);
       this.itineraryGenerated.emit(itinerary);
     } catch {
       // Error handled by geminiService.generationError signal
