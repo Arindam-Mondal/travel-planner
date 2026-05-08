@@ -1,0 +1,78 @@
+<mat-card class="trip-card" (click)="openTrip()" (keydown.enter)="openTrip()" tabindex="0"
+  role="article" [attr.aria-label]="'Trip to ' + trip().preferences.destination">
+  <div class="card-hero" [style.background]="'linear-gradient(135deg, #1565C0 0%, #00897B 100%)'">
+    <mat-icon class="hero-icon">flight_takeoff</mat-icon>
+    <h3 class="destination">{{ trip().preferences.destination }}</h3>
+  </div>
+
+  <mat-card-content>
+    <div class="trip-meta">
+      <span class="dates">
+        <mat-icon>calendar_today</mat-icon>
+        {{ trip().preferences.startDate }} → {{ trip().preferences.endDate }}
+      </span>
+      <span class="days">
+        {{ trip().itinerary.days.length }} days · {{ trip().itinerary.days.length * 3 | number }} stops est.
+      </span>
+    </div>
+
+    <mat-chip-set class="tags" aria-label="Trip details">
+      <mat-chip>
+        <mat-icon matChipAvatar>{{ getStyleIcon(trip().preferences.travelStyle) }}</mat-icon>
+        {{ trip().preferences.travelStyle | titlecase }}
+      </mat-chip>
+      <mat-chip>
+        <mat-icon matChipAvatar>savings</mat-icon>
+        {{ getBudgetLabel(trip().preferences.budget) }}
+      </mat-chip>
+      <mat-chip>
+        <mat-icon matChipAvatar>group</mat-icon>
+        {{ trip().preferences.groupSize }}
+      </mat-chip>
+    </mat-chip-set>
+
+    @if (trip().itinerary.summary) {
+      <p class="summary">{{ trip().itinerary.summary }}</p>
+    }
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="openTrip(); $event.stopPropagation()" aria-label="View itinerary">
+      <mat-icon>visibility</mat-icon>
+      View
+    </button>
+
+    <span class="actions-spacer"></span>
+
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="cardMenu"
+      (click)="$event.stopPropagation()"
+      aria-label="More options"
+      matTooltip="More options"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #cardMenu="matMenu">
+      <button mat-menu-item (click)="editTrip()">
+        <mat-icon>edit</mat-icon> Edit
+      </button>
+      <button mat-menu-item (click)="shareTrip()" [disabled]="isSharing()">
+        @if (isSharing()) { <mat-spinner diameter="18"></mat-spinner> }
+        @else { <mat-icon>share</mat-icon> }
+        Share
+      </button>
+      <button mat-menu-item (click)="exportPdf()" [disabled]="isExporting()">
+        @if (isExporting()) { <mat-spinner diameter="18"></mat-spinner> }
+        @else { <mat-icon>picture_as_pdf</mat-icon> }
+        Export PDF
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item class="delete-item" (click)="deleteTrip()" [disabled]="isDeleting()">
+        <mat-icon color="warn">delete</mat-icon>
+        Delete
+      </button>
+    </mat-menu>
+  </mat-card-actions>
+</mat-card>

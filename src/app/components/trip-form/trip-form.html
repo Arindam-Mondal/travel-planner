@@ -1,0 +1,164 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate aria-label="Trip planning form">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar>travel_explore</mat-icon>
+      <mat-card-title>Plan Your Trip</mat-card-title>
+      <mat-card-subtitle>Tell us about your ideal journey</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Destination -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Destination</mat-label>
+        <input
+          matInput
+          formControlName="destination"
+          placeholder="e.g. Tokyo, Japan"
+          aria-required="true"
+          aria-describedby="destination-error"
+        />
+        <mat-icon matSuffix>location_on</mat-icon>
+        @if (form.get('destination')?.invalid && form.get('destination')?.touched) {
+          <mat-error id="destination-error" aria-live="polite">
+            Please enter a destination (minimum 2 characters)
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Date Range -->
+      <div class="date-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Start Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="startPicker"
+            formControlName="startDate"
+            [min]="minDate"
+            aria-required="true"
+            aria-describedby="start-error"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="startPicker" aria-label="Choose start date"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          @if (form.get('startDate')?.invalid && form.get('startDate')?.touched) {
+            <mat-error id="start-error" aria-live="polite">Start date is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>End Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="endPicker"
+            formControlName="endDate"
+            [min]="form.get('startDate')?.value || minDate"
+            aria-required="true"
+            aria-describedby="end-error"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="endPicker" aria-label="Choose end date"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          @if (form.errors?.['endBeforeStart'] && form.get('endDate')?.touched) {
+            <mat-error id="end-error" aria-live="polite">End date must be after start date</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- Budget -->
+      <div class="field-group">
+        <label class="field-label" id="budget-label">Budget Level</label>
+        <mat-button-toggle-group
+          formControlName="budget"
+          aria-labelledby="budget-label"
+          class="toggle-group"
+        >
+          @for (opt of budgetOptions; track opt.value) {
+            <mat-button-toggle [value]="opt.value" [matTooltip]="opt.dailyRange">
+              <mat-icon>{{ opt.icon }}</mat-icon>
+              {{ opt.label }}
+            </mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      </div>
+
+      <!-- Travel Style -->
+      <div class="field-group">
+        <label class="field-label" id="style-label">Travel Style</label>
+        <mat-button-toggle-group
+          formControlName="travelStyle"
+          aria-labelledby="style-label"
+          class="toggle-group"
+        >
+          @for (opt of styleOptions; track opt.value) {
+            <mat-button-toggle [value]="opt.value" [matTooltip]="opt.description">
+              <mat-icon>{{ opt.icon }}</mat-icon>
+              {{ opt.label }}
+            </mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      </div>
+
+      <!-- Group Size -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Group Size</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="groupSize"
+          min="1"
+          max="20"
+          aria-required="true"
+          aria-describedby="group-error"
+        />
+        <mat-icon matSuffix>group</mat-icon>
+        @if (form.get('groupSize')?.invalid && form.get('groupSize')?.touched) {
+          <mat-error id="group-error" aria-live="polite">Group size must be between 1 and 20</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Special Constraints -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Special Constraints (optional)</mat-label>
+        <textarea
+          matInput
+          formControlName="constraints"
+          rows="3"
+          placeholder="e.g. vegetarian diet, wheelchair accessible, no flying..."
+          aria-describedby="constraints-hint constraints-error"
+        ></textarea>
+        <mat-icon matSuffix>tune</mat-icon>
+        <mat-hint id="constraints-hint">{{ form.get('constraints')?.value?.length ?? 0 }}/500</mat-hint>
+        @if (form.get('constraints')?.hasError('maxlength')) {
+          <mat-error id="constraints-error" aria-live="polite">Maximum 500 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Error Banner -->
+      @if (geminiService.generationError()) {
+        <div class="error-banner" role="alert" aria-live="assertive">
+          <mat-icon>error_outline</mat-icon>
+          {{ geminiService.generationError()!.message }}
+        </div>
+      }
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="geminiService.isGenerating()"
+        aria-label="Generate AI itinerary"
+        class="generate-btn"
+      >
+        @if (geminiService.isGenerating()) {
+          <mat-spinner diameter="20" aria-label="Generating itinerary"></mat-spinner>
+          Generating…
+        } @else {
+          <ng-container>
+            <mat-icon>auto_awesome</mat-icon>
+            Generate Itinerary
+          </ng-container>
+        }
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

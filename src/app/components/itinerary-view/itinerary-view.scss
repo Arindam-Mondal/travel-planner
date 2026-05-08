@@ -1,0 +1,56 @@
+.itinerary-header {
+  padding: 16px 0 8px;
+  h2 { margin: 0 0 6px; font-size: 1.5rem; color: var(--tp-primary); }
+  .summary { color: #555; margin: 0 0 12px; font-size: 14px; line-height: 1.5; }
+}
+
+.meta-chips { margin-bottom: 8px; }
+
+.day-content { padding: 16px 0; }
+
+.day-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  mat-icon { color: var(--tp-accent); margin-top: 2px; }
+  h3 { margin: 0; font-size: 1.1rem; }
+  .day-date { font-size: 12px; color: #777; }
+}
+
+.stop-panel {
+  margin-bottom: 4px;
+  cursor: pointer;
+  &:focus-within { outline: 2px solid var(--tp-primary); }
+}
+
+.category-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.stop-number {
+  font-weight: 700;
+  min-width: 20px;
+  color: #999;
+  font-size: 12px;
+}
+
+.category-icon { font-size: 18px; color: #666; margin: 0 4px; }
+
+.stop-name { font-weight: 500; }
+
+.duration-chip, .cost-chip { font-size: 11px; }
+
+.stop-details {
+  p { display: flex; align-items: flex-start; gap: 6px; margin: 0 0 8px; font-size: 13px; }
+  mat-icon { font-size: 16px; color: #888; flex-shrink: 0; margin-top: 1px; }
+}
+
+.stop-address { color: #444; }
+.stop-meta { color: #666; }
+.stop-tips { color: #555; font-style: italic; }

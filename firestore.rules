@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Authenticated users can read/write only their own trips
+    match /users/{userId}/trips/{tripId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Anyone can read a trip document that has a shareToken (public share feature)
+      allow read: if resource.data.shareToken != null;
+    }
+
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

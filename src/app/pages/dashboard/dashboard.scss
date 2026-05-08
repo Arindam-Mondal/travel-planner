@@ -1,0 +1,39 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  h1 { margin: 0 0 4px; font-size: 1.8rem; }
+  .welcome { color: #666; margin: 0; }
+}
+
+.search-field { width: 100%; max-width: 400px; margin-bottom: 24px; }
+
+.loading-container, .error-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 16px;
+  gap: 16px;
+  text-align: center;
+  color: #666;
+}
+
+.empty-icon { font-size: 80px; width: 80px; height: 80px; color: #1565C0; opacity: .5; }
+.empty-state h2 { margin: 0; font-size: 1.5rem; color: #333; }
+.empty-state p { max-width: 400px; line-height: 1.6; }
+
+.trips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.no-results { color: #888; text-align: center; padding: 32px; }

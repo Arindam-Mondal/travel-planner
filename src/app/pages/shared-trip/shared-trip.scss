@@ -1,0 +1,30 @@
+.loading-container, .not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  color: #777;
+  text-align: center;
+  mat-icon { font-size: 64px; width: 64px; height: 64px; opacity: .5; }
+}
+
+.shared-container { max-width: 1200px; margin: 0 auto; padding: 0 16px 24px; }
+
+.shared-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #e3f2fd;
+  color: #1565C0;
+  padding: 10px 16px;
+  font-size: 14px;
+  .plan-cta { margin-left: auto; }
+}
+
+.detail-header {
+  padding: 20px 0 8px;
+  h1 { margin: 0 0 4px; font-size: 1.8rem; }
+  p { margin: 0; color: #666; }
+}

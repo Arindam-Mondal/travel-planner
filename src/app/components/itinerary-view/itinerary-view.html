@@ -1,0 +1,109 @@
+<div class="itinerary-header" @slideIn>
+  <div class="destination-info">
+    <h2>{{ itinerary().destination }}</h2>
+    <p class="summary">{{ itinerary().summary }}</p>
+    <div class="meta-chips">
+      <mat-chip-set aria-label="Trip summary">
+        <mat-chip>
+          <mat-icon matChipAvatar>calendar_today</mat-icon>
+          {{ itinerary().days.length }} days
+        </mat-chip>
+        <mat-chip>
+          <mat-icon matChipAvatar>place</mat-icon>
+          {{ totalStops() }} stops
+        </mat-chip>
+        <mat-chip>
+          <mat-icon matChipAvatar>payments</mat-icon>
+          {{ itinerary().totalEstimatedCost }}
+        </mat-chip>
+        <mat-chip>
+          <mat-icon matChipAvatar>{{ preferences().travelStyle === 'food' ? 'restaurant' : preferences().travelStyle === 'adventure' ? 'hiking' : preferences().travelStyle === 'relaxation' ? 'spa' : 'museum' }}</mat-icon>
+          {{ preferences().travelStyle | titlecase }}
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+  </div>
+</div>
+
+<mat-tab-group
+  animationDuration="200ms"
+  (selectedIndexChange)="onTabChange($event)"
+  aria-label="Itinerary days"
+>
+  @for (day of itinerary().days; track day.dayNumber) {
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span aria-label="Day {{ day.dayNumber }}, {{ day.date }}">
+          Day {{ day.dayNumber }}
+        </span>
+      </ng-template>
+
+      <div class="day-content" @slideIn>
+        <div class="day-header">
+          <mat-icon>wb_sunny</mat-icon>
+          <div>
+            <h3>{{ day.theme }}</h3>
+            <span class="day-date">{{ day.date }}</span>
+          </div>
+        </div>
+
+        <mat-accordion multi>
+          @for (stop of day.stops; track stop.id; let i = $index) {
+            <mat-expansion-panel
+              class="stop-panel"
+              (click)="selectStop(stop)"
+              (keydown.enter)="selectStop(stop)"
+              (keydown.space)="selectStop(stop)"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span
+                    class="category-dot"
+                    [style.background]="getCategoryColor(stop.category)"
+                    [attr.aria-label]="stop.category + ' stop'"
+                  ></span>
+                  <span class="stop-number">{{ i + 1 }}</span>
+                  <mat-icon class="category-icon">{{ CATEGORY_ICONS[stop.category] }}</mat-icon>
+                  <span class="stop-name">{{ stop.name }}</span>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-chip-set aria-label="Stop details">
+                    <mat-chip class="duration-chip">
+                      <mat-icon matChipAvatar>schedule</mat-icon>
+                      {{ formatDuration(stop.durationMinutes) }}
+                    </mat-chip>
+                    @if (stop.estimatedCost) {
+                      <mat-chip class="cost-chip">
+                        <mat-icon matChipAvatar>payments</mat-icon>
+                        {{ stop.estimatedCost }}
+                      </mat-chip>
+                    }
+                  </mat-chip-set>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <div class="stop-details" @slideIn>
+                <p class="stop-address">
+                  <mat-icon>location_on</mat-icon>
+                  {{ stop.address }}
+                </p>
+                @if (stop.bestTimeToVisit) {
+                  <p class="stop-meta">
+                    <mat-icon>access_time</mat-icon>
+                    Best time: {{ stop.bestTimeToVisit }}
+                  </p>
+                }
+                @if (stop.tips) {
+                  <p class="stop-tips">
+                    <mat-icon>lightbulb</mat-icon>
+                    {{ stop.tips }}
+                  </p>
+                }
+              </div>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      </div>
+    </mat-tab>
+  }
+</mat-tab-group>

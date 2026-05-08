@@ -1,0 +1,79 @@
+<div class="map-wrapper">
+  <!-- Loading state -->
+  @if (!mapsService.isLoaded()) {
+    <div class="map-loading" aria-busy="true" aria-label="Loading map">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Loading map…</p>
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (mapsService.mapError()) {
+    <div class="map-error" role="alert">
+      <mat-icon>map_off</mat-icon>
+      <p>{{ mapsService.mapError()!.message }}</p>
+    </div>
+  }
+
+  <!-- Map container -->
+  <div
+    #mapContainer
+    class="map-container"
+    role="application"
+    aria-label="Interactive trip map showing all stops"
+    [style.visibility]="mapsService.isLoaded() ? 'visible' : 'hidden'"
+  ></div>
+
+  <!-- Screen-reader accessible stop list -->
+  <ul class="sr-only" aria-label="Map stops list">
+    @for (stop of stops(); track stop.id; let i = $index) {
+      <li>Stop {{ i + 1 }}: {{ stop.name }} at {{ stop.address }}</li>
+    }
+  </ul>
+
+  <!-- Selected stop info panel -->
+  @if (mapsService.selectedStop()) {
+    <mat-card class="info-panel" role="dialog" aria-label="Stop details">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>{{ CATEGORY_ICONS[mapsService.selectedStop()!.category] }}</mat-icon>
+        <mat-card-title>{{ mapsService.selectedStop()!.name }}</mat-card-title>
+        <mat-card-subtitle>{{ mapsService.selectedStop()!.category | titlecase }}</mat-card-subtitle>
+        <button
+          mat-icon-button
+          class="close-btn"
+          (click)="closeInfoPanel()"
+          (keydown.escape)="closeInfoPanel()"
+          aria-label="Close stop details"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="address">
+          <mat-icon>location_on</mat-icon>
+          {{ mapsService.selectedStop()!.address }}
+        </p>
+        <mat-chip-set aria-label="Stop metadata">
+          <mat-chip>
+            <mat-icon matChipAvatar>schedule</mat-icon>
+            {{ formatDuration(mapsService.selectedStop()!.durationMinutes) }}
+          </mat-chip>
+          <mat-chip>
+            <mat-icon matChipAvatar>payments</mat-icon>
+            {{ mapsService.selectedStop()!.estimatedCost }}
+          </mat-chip>
+          <mat-chip>
+            <mat-icon matChipAvatar>access_time</mat-icon>
+            {{ mapsService.selectedStop()!.bestTimeToVisit }}
+          </mat-chip>
+        </mat-chip-set>
+        @if (mapsService.selectedStop()!.tips) {
+          <p class="tips">
+            <mat-icon>lightbulb</mat-icon>
+            {{ mapsService.selectedStop()!.tips }}
+          </p>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

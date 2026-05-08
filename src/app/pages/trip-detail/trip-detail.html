@@ -1,0 +1,56 @@
+@if (isLoading()) {
+  <div class="loading-container" aria-busy="true" aria-label="Loading trip">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading trip…</p>
+  </div>
+}
+
+@else if (!trip()) {
+  <div class="not-found-state" role="alert">
+    <mat-icon>search_off</mat-icon>
+    <h2>Trip not found</h2>
+    <a mat-raised-button color="primary" routerLink="/dashboard">Back to Trips</a>
+  </div>
+}
+
+@else {
+  <div class="detail-container">
+    <header class="detail-header">
+      <div>
+        <h1>{{ trip()!.itinerary.destination }}</h1>
+        <p>{{ trip()!.preferences.startDate }} → {{ trip()!.preferences.endDate }}</p>
+      </div>
+      <div class="header-actions" role="toolbar" aria-label="Trip actions">
+        <button mat-stroked-button (click)="editTrip()" aria-label="Edit trip">
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+        <button mat-stroked-button (click)="shareTrip()" aria-label="Share trip">
+          <mat-icon>share</mat-icon> Share
+        </button>
+        <button mat-stroked-button (click)="exportToCalendar()" aria-label="Export to Calendar">
+          <mat-icon>calendar_month</mat-icon> Calendar
+        </button>
+        <button mat-stroked-button (click)="exportPdf()" aria-label="Export PDF">
+          <mat-icon>picture_as_pdf</mat-icon> PDF
+        </button>
+      </div>
+    </header>
+
+    <mat-tab-group aria-label="View itinerary or map">
+      <mat-tab label="Itinerary">
+        <ng-template matTabContent>
+          <app-itinerary-view
+            [itinerary]="trip()!.itinerary"
+            [preferences]="trip()!.preferences"
+            (dayChanged)="onDayChanged($event)"
+          />
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Map">
+        <ng-template matTabContent>
+          <app-map-view [stops]="activeStops()" [activeDay]="activeDay()" />
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+}

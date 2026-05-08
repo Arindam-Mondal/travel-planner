@@ -1,0 +1,56 @@
+.planner-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.planner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+  h1 { margin: 0; font-size: 1.8rem; }
+}
+
+.action-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  button { display: flex; align-items: center; gap: 6px; }
+  mat-spinner { display: inline-block; }
+}
+
+.planner-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-panel { position: sticky; top: 80px; }
+
+.result-panel { min-height: 400px; }
+
+.result-tabs { width: 100%; }
+
+.empty-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 16px;
+  text-align: center;
+  color: #777;
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  .empty-icon { font-size: 72px; width: 72px; height: 72px; color: #1565C0; opacity: .4; margin-bottom: 16px; }
+  h2 { margin: 0 0 8px; color: #444; }
+  p { max-width: 360px; line-height: 1.6; }
+}

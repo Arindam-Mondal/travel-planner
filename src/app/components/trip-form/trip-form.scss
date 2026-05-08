@@ -1,0 +1,50 @@
+mat-card { margin-bottom: 16px; }
+
+.full-width { width: 100%; margin-bottom: 12px; }
+
+.half-width { width: calc(50% - 8px); margin-bottom: 12px; }
+
+.date-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.field-group {
+  margin-bottom: 16px;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0,0,0,.6);
+  margin-bottom: 8px;
+}
+
+.toggle-group {
+  width: 100%;
+  mat-button-toggle {
+    flex: 1;
+    mat-icon { font-size: 18px; vertical-align: middle; margin-right: 4px; }
+  }
+}
+
+.generate-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  mat-spinner { display: inline-block; }
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffebee;
+  color: #c62828;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-size: 14px;
+}

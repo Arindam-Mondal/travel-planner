@@ -1,0 +1,47 @@
+<mat-toolbar color="primary" role="navigation" aria-label="Main navigation">
+  <a routerLink="/dashboard" class="brand" aria-label="Go to dashboard">
+    <mat-icon>flight_takeoff</mat-icon>
+    <span class="brand-name">TravelAI</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <a mat-button routerLink="/trip/new" aria-label="Plan a new trip">
+    <mat-icon>add</mat-icon>
+    New Trip
+  </a>
+
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="userMenu"
+    aria-label="User account menu"
+    matTooltip="Account"
+  >
+    @if (authService.photoURL()) {
+      <img
+        [src]="authService.photoURL()!"
+        [alt]="authService.displayName()"
+        class="avatar"
+        referrerpolicy="no-referrer"
+      />
+    } @else {
+      <mat-icon>account_circle</mat-icon>
+    }
+  </button>
+
+  <mat-menu #userMenu="matMenu">
+    <div class="menu-header" role="none">
+      <span class="menu-name">{{ authService.displayName() }}</span>
+      <span class="menu-email">{{ authService.email() }}</span>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item routerLink="/dashboard">
+      <mat-icon>dashboard</mat-icon>
+      My Trips
+    </button>
+    <button mat-menu-item (click)="signOut()">
+      <mat-icon>logout</mat-icon>
+      Sign Out
+    </button>
+  </mat-menu>
+</mat-toolbar>

@@ -1,0 +1,69 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div>
+      <h1>My Trips</h1>
+      <p class="welcome">Welcome back, {{ authService.displayName() }}</p>
+    </div>
+    <a mat-raised-button color="primary" routerLink="/trip/new" aria-label="Plan a new trip">
+      <mat-icon>add</mat-icon>
+      New Trip
+    </a>
+  </header>
+
+  <!-- Search -->
+  @if (firestoreService.trips().length > 0) {
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search trips</mat-label>
+      <input matInput (input)="onSearch($event)" placeholder="Destination or keywords…" aria-label="Search your trips" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  }
+
+  <!-- Loading -->
+  @if (firestoreService.isLoading()) {
+    <div class="loading-container" aria-busy="true" aria-label="Loading your trips">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Loading your trips…</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @else if (firestoreService.error()) {
+    <div class="error-state" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ firestoreService.error()!.message }}</p>
+      <button mat-raised-button color="primary" (click)="firestoreService.loadUserTrips()">
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @else if (firestoreService.trips().length === 0) {
+    <div class="empty-state" role="region" aria-label="No trips yet">
+      <mat-icon class="empty-icon">travel_explore</mat-icon>
+      <h2>Start your adventure</h2>
+      <p>You haven't planned any trips yet. Let AI build your perfect itinerary in seconds.</p>
+      <a mat-raised-button color="primary" routerLink="/trip/new">
+        <mat-icon>auto_awesome</mat-icon>
+        Plan My First Trip
+      </a>
+    </div>
+  }
+
+  <!-- Trip Grid -->
+  @else {
+    @if (filteredTrips().length === 0) {
+      <p class="no-results">No trips match "{{ searchQuery() }}"</p>
+    } @else {
+      <div class="trips-grid" role="list" aria-label="Your saved trips">
+        @for (trip of filteredTrips(); track trip.id) {
+          <div role="listitem">
+            <app-trip-card [trip]="trip" />
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

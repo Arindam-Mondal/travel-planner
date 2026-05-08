@@ -1,0 +1,49 @@
+.trip-card {
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  &:hover, &:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.15);
+    outline: none;
+  }
+}
+
+.card-hero {
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 16px;
+  border-radius: 4px 4px 0 0;
+}
+
+.hero-icon { color: rgba(255,255,255,.6); font-size: 36px; position: absolute; top: 16px; right: 16px; }
+
+.destination { color: white; margin: 0; font-size: 1.2rem; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,.3); }
+
+.trip-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 8px;
+  .dates { display: flex; align-items: center; gap: 4px; mat-icon { font-size: 14px; } }
+}
+
+.tags { margin-bottom: 8px; }
+
+.summary {
+  font-size: 13px;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.actions-spacer { flex: 1; }
+
+.delete-item mat-icon { color: #c62828; }

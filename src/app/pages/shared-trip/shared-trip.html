@@ -1,0 +1,49 @@
+@if (isLoading()) {
+  <div class="loading-container" aria-busy="true">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading shared trip…</p>
+  </div>
+}
+
+@else if (notFound()) {
+  <div class="not-found" role="alert">
+    <mat-icon>link_off</mat-icon>
+    <h2>This trip link is no longer valid</h2>
+    <p>The owner may have revoked sharing access.</p>
+    <a mat-raised-button color="primary" routerLink="/login">Plan your own trip</a>
+  </div>
+}
+
+@else if (trip()) {
+  <div class="shared-container">
+    <div class="shared-banner">
+      <mat-icon>share</mat-icon>
+      <span>Shared itinerary — view only</span>
+      <a mat-button color="primary" routerLink="/login" class="plan-cta">
+        Plan your own trip
+      </a>
+    </div>
+
+    <header class="detail-header">
+      <h1>{{ trip()!.itinerary.destination }}</h1>
+      <p>{{ trip()!.preferences.startDate }} → {{ trip()!.preferences.endDate }}</p>
+    </header>
+
+    <mat-tab-group aria-label="View itinerary or map">
+      <mat-tab label="Itinerary">
+        <ng-template matTabContent>
+          <app-itinerary-view
+            [itinerary]="trip()!.itinerary"
+            [preferences]="trip()!.preferences"
+            (dayChanged)="onDayChanged($event)"
+          />
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Map">
+        <ng-template matTabContent>
+          <app-map-view [stops]="activeStops()" [activeDay]="activeDay()" />
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+}

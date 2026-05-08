@@ -1,0 +1,78 @@
+<div class="planner-container">
+  <header class="planner-header">
+    <h1>Plan a New Trip</h1>
+    @if (currentItinerary()) {
+      <div class="action-bar" role="toolbar" aria-label="Trip actions">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="saveTrip()"
+          [disabled]="isSaving()"
+          aria-label="Save trip"
+        >
+          @if (isSaving()) { <mat-spinner diameter="18"></mat-spinner> }
+          @else { <mat-icon>save</mat-icon> }
+          Save Trip
+        </button>
+
+        <button
+          mat-stroked-button
+          (click)="exportToCalendar()"
+          [disabled]="isExportingCal()"
+          aria-label="Export to Google Calendar"
+          matTooltip="Export events to Google Calendar"
+        >
+          @if (isExportingCal()) { <mat-spinner diameter="18"></mat-spinner> }
+          @else { <mat-icon>calendar_month</mat-icon> }
+          Calendar
+        </button>
+
+        <button mat-stroked-button (click)="exportPdf()" aria-label="Download PDF">
+          <mat-icon>picture_as_pdf</mat-icon>
+          PDF
+        </button>
+      </div>
+    }
+  </header>
+
+  <div class="planner-layout">
+    <!-- Left: Form -->
+    <aside class="form-panel">
+      <app-trip-form
+        (itineraryGenerated)="onItineraryGenerated($event)"
+      />
+    </aside>
+
+    <!-- Right: Itinerary + Map -->
+    <section class="result-panel" aria-label="Generated itinerary and map">
+      @if (currentItinerary() && currentPreferences()) {
+        <mat-tab-group class="result-tabs" aria-label="View itinerary or map">
+          <mat-tab label="Itinerary">
+            <ng-template matTabContent>
+              <app-itinerary-view
+                [itinerary]="currentItinerary()!"
+                [preferences]="currentPreferences()!"
+                (stopSelected)="onStopSelected($event)"
+                (dayChanged)="onDayChanged($event)"
+              />
+            </ng-template>
+          </mat-tab>
+          <mat-tab label="Map">
+            <ng-template matTabContent>
+              <app-map-view
+                [stops]="activeStops()"
+                [activeDay]="activeDay()"
+              />
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      } @else {
+        <div class="empty-result" role="region" aria-label="Awaiting itinerary generation">
+          <mat-icon class="empty-icon">auto_awesome</mat-icon>
+          <h2>Your itinerary will appear here</h2>
+          <p>Fill in the form and click <strong>Generate Itinerary</strong> to get your personalised trip plan.</p>
+        </div>
+      }
+    </section>
+  </div>
+</div>
