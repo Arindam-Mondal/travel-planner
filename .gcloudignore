@@ -1,0 +1,19 @@
+# gcloud uses this file instead of .gitignore when uploading source.
+# dist/ is intentionally NOT excluded — Dockerfile copies from it.
+
+node_modules/
+.angular/
+coverage/
+.git/
+tmp/
+out-tsc/
+
+src/
+angular.json
+tsconfig*.json
+karma.conf.js
+.editorconfig
+.prettierrc
+firestore.*
+firebase.json
+.firebaserc
